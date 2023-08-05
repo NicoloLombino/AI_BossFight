@@ -16,9 +16,14 @@ public class JumpAwayLeaf : Leaf
             return Outcome.FAIL;
         }
 
+        if (agent.GetComponent<EnemyMonster>().currentHealth <= 0)
+        {
+            return Outcome.FAIL;
+        }
+
         agent.GetComponent<Animator>().SetTrigger("JumpAway");
         agent.GetComponent<EnemyMonster>().JumpAway();
-        await Task.Delay((int)(4 * 1000));
+        await Task.Delay((int)(10 * 1000));
         return Outcome.SUCCESS;
     }
 }

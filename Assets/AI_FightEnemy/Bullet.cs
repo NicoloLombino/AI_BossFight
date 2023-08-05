@@ -6,6 +6,8 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField]
     private float speed;
+    [SerializeField]
+    public int damage;
 
     public bool isPlayer;
 
@@ -25,7 +27,8 @@ public class Bullet : MonoBehaviour
         {
             if(isPlayer)
             {
-                other.gameObject.GetComponent<EnemyMonster>().ReceiveDamage(3);
+                other.gameObject.GetComponent<EnemyMonster>().ReceiveDamage(damage);
+                Debug.Log(damage);
             }
         }
     }

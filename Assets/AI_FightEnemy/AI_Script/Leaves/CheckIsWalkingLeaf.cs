@@ -10,7 +10,10 @@ public class CheckIsWalkingLeaf : Leaf
         {
             return Outcome.FAIL;
         }
-
+        if (agent.GetComponent<EnemyMonster>().currentHealth <= 0)
+        {
+            return Outcome.FAIL;
+        }
         await Task.Delay((int)(1 * 1000));
         return Outcome.SUCCESS;
     }

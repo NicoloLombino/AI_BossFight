@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0))
         {
-            rifle.Shoot();
+            rifle.Shoot(3);
         }
     }
 

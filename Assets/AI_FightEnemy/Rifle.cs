@@ -5,12 +5,15 @@ using UnityEngine;
 public class Rifle : MonoBehaviour
 {
     [SerializeField]
-    private GameObject bulletPrefab;
+    private Bullet bulletPrefab;
     [SerializeField]
     private Transform shotTransform;
+    [SerializeField]
+    internal GameObject arrowInBow;
 
-    public void Shoot()
+    public void Shoot(int charge)
     {
-        GameObject bullet = Instantiate(bulletPrefab, shotTransform.position, shotTransform.rotation);
+        Bullet bullet = Instantiate(bulletPrefab, shotTransform.position, shotTransform.rotation);
+        bullet.damage += charge;
     }
 }

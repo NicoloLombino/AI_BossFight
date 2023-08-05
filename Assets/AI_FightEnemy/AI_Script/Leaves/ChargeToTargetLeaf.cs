@@ -26,7 +26,7 @@ public class ChargeToTargetLeaf : Leaf
             return Outcome.FAIL;
         }
 
-        navMeshAgent.speed = 30;
+        navMeshAgent.speed = 30 * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         agent.GetComponent<EnemyMonster>().LookAtTarget();
         agent.GetComponent<Animator>().SetTrigger("Charge");
         navMeshAgent.SetDestination(position);
@@ -38,11 +38,11 @@ public class ChargeToTargetLeaf : Leaf
         }
         if (agent.GetComponent<EnemyMonster>().hasRageMode)
         {
-            agent.GetComponent<Animator>().SetTrigger("ChargeAttack");
-            await Task.Delay((int)(3 * 1000));
-
+            agent.GetComponent<Animator>().SetTrigger("ChargeRageAttack");
+            await Task.Delay((int)(1 * 1000));
+            agent.transform.position += transform.forward * 2;
         }
-        navMeshAgent.speed = 3.5f;
+        navMeshAgent.speed = 3.5f * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         navMeshAgent.isStopped = true;
         Debug.Log("END CHARGE TO TARGET");
         agent.GetComponent<Animator>().SetTrigger("StopCharge");

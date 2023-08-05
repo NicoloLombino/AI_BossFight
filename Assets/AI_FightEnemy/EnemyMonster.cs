@@ -6,9 +6,7 @@ using UnityEngine.AI;
 public class EnemyMonster : MonoBehaviour
 {
     NavMeshAgent agent;
-    Animator anim;
-    public Animator animatorBase;
-    public Animator animatorRage;
+    public Animator anim;
 
     [SerializeField]
     public Transform target;
@@ -33,6 +31,7 @@ public class EnemyMonster : MonoBehaviour
     public float attackRange;
     public int maxRageValue;
     public int rageValueIncrementWhenHit;
+    public float RageSpeedIncrement = 1f;
     [SerializeField]
     private float MaxRageTimer;
     [SerializeField]
@@ -48,7 +47,7 @@ public class EnemyMonster : MonoBehaviour
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         healthToRunAway = maxHealth * (percentageToRunAway / 100);
-        anim = animatorBase;
+        material.color = Color.white;
     }
 
     void Update()
@@ -64,7 +63,10 @@ public class EnemyMonster : MonoBehaviour
                 rageValueIncrementWhenHit += 2;
                 material.color = Color.white;
                 rageLight.SetActive(false);
-                anim = animatorBase;
+                anim.speed = 1;
+                RageSpeedIncrement = 1;
+                //anim.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.
+                //    Instantiate(Resources.Load("Animation/Mutant Animator.controller", typeof(RuntimeAnimatorController)));
             }
         }
     }
@@ -74,15 +76,24 @@ public class EnemyMonster : MonoBehaviour
         currentHealth -= damage;
         if(!hasRageMode)
         {
-            rageValue += rageValueIncrementWhenHit;
+            rageValue += rageValueIncrementWhenHit + damage;
             rageValue = Mathf.Min(rageValue, maxRageValue);
             if(rageValue >= maxRageValue)
             {
                 hasRageMode = true;
                 rageLight.SetActive(true);
                 material.color = Color.red;
-                anim = animatorRage;
+                anim.speed = 2;
+                RageSpeedIncrement = 1.5f;
+                //anim.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.
+                //    Instantiate(Resources.Load("Animation/MutantRage Animator.controller", typeof(RuntimeAnimatorController)));
             }
+        }
+
+        if(currentHealth <= 0)
+        {
+            anim.SetTrigger("Death");
+            agent.enabled = false;
         }
     }
 

@@ -22,12 +22,13 @@ public class AttackDistanceLeaf : Leaf
         }
         
         navMeshAgent.isStopped = true;
-
+        float waitTime = 0;
+        waitTime = agent.GetComponent<EnemyMonster>().hasRageMode ? 1.5f : 3;
         agent.GetComponent<EnemyMonster>().LookAtTarget();
         agent.GetComponent<Animator>().SetTrigger("Jumping");
-        await Task.Delay((int)(3 * 1000));
+        await Task.Delay((int)(waitTime * 1000));
         GameObject attackDistance = Instantiate(attackDistancePrefab, attackDistanceHole.position, attackDistanceHole.rotation);
-        await Task.Delay((int)(5 * 1000));
+        await Task.Delay((int)((waitTime + 2) * 1000));
         return Outcome.SUCCESS;
     }
 }

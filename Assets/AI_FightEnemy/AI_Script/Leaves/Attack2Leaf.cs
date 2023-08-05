@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Attack2Leaf : Leaf
 {
+    public GameObject[] colliders;
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
     {
         //if (!agent.GetComponent<EnemyMonster>().isTargetInRange)
@@ -13,9 +14,15 @@ public class Attack2Leaf : Leaf
 
         agent.GetComponent<EnemyMonster>().LookAtTarget();
         agent.GetComponent<Animator>().SetTrigger("Attack2");
-        Debug.Log("ATTACK 2");
+        foreach(GameObject col in colliders)
+        {
+            col.SetActive(true);
+        }
         await Task.Delay((int)(3 * 1000));
-        Debug.Log("ATTACK 2 FINE AWAIT");
+        foreach (GameObject col in colliders)
+        {
+            col.SetActive(false);
+        }
         return Outcome.SUCCESS;
     }
 }
