@@ -11,7 +11,10 @@ public class ChargeToTargetLeaf : Leaf
     private float acceptanceRange;
     [SerializeField]
     private string targetBlackboardKey;
-
+    [SerializeField]
+    private GameObject chargeCollider;
+    [SerializeField]
+    private GameObject finalAttackCollider;
     public float maxRunTimer;
 
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
@@ -31,6 +34,7 @@ public class ChargeToTargetLeaf : Leaf
         agent.GetComponent<Animator>().SetTrigger("Charge");
         navMeshAgent.SetDestination(position);
         navMeshAgent.isStopped = false;
+        chargeCollider.SetActive(true);
 
         while (Vector3.Distance(agent.transform.position, position) > acceptanceRange)
         {
@@ -39,9 +43,13 @@ public class ChargeToTargetLeaf : Leaf
         if (agent.GetComponent<EnemyMonster>().hasRageMode)
         {
             agent.GetComponent<Animator>().SetTrigger("ChargeRageAttack");
-            await Task.Delay((int)(1 * 1000));
+            await Task.Delay((int)(0.5 * 1000));
+            finalAttackCollider.SetActive(true);
+            await Task.Delay((int)(0.5 * 1000));
             agent.transform.position += transform.forward * 2;
+            finalAttackCollider.SetActive(false);
         }
+        chargeCollider.SetActive(false);
         navMeshAgent.speed = 3.5f * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         navMeshAgent.isStopped = true;
         Debug.Log("END CHARGE TO TARGET");

@@ -20,9 +20,10 @@ public class PlayerArcher : MonoBehaviour
     public bool isRunning;
 
     [Header("Stats")]
-    private float health = 100;
+    public float health = 100;
     public float currentStamina;
     public float currentBowCharge;
+    public bool isReceivingDamage;
 
     [Header("Personalize")]
     public float staminaMax = 5;
@@ -41,6 +42,8 @@ public class PlayerArcher : MonoBehaviour
 
     void Update()
     {
+        if (isReceivingDamage) return;
+
         ReadMovement();
 
         if (Input.GetMouseButtonDown(0) && canShoot && !isRunning)
@@ -50,6 +53,13 @@ public class PlayerArcher : MonoBehaviour
         }
         else if ((Input.GetMouseButtonUp(0) && !canShoot && !isRunning && currentBowCharge > 1f) || (currentBowCharge >= maxBowCharge))
         {
+            if(isReceivingDamage)
+            {
+                bow.arrowInBow.SetActive(false);
+                canShoot = true;
+                currentBowCharge = 0;
+                return;
+            }
             EndShoot();
         }
 
@@ -146,6 +156,15 @@ public class PlayerArcher : MonoBehaviour
     public void ReceiveDamage(int damage)
     {
         health -= damage;
+        anim.SetTrigger("isHurt");
+        StartCoroutine(ReceiveDamageCoroutine(2));
+    }
+
+    public IEnumerator ReceiveDamageCoroutine(float disableTimer)
+    {
+        isReceivingDamage = true;
+        yield return new WaitForSecondsRealtime(disableTimer);
+        isReceivingDamage = false;
     }
 }
 

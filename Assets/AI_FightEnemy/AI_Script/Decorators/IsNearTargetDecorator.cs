@@ -11,7 +11,6 @@ public class IsNearTargetDecorator : Decorator
         float distance = Vector3.Distance(transform.position, agent.GetComponent<EnemyMonster>().target.position);
         if(distance < agent.GetComponent<EnemyMonster>().attackRange)
         {
-            Debug.Log("IS NEAR");
             return Outcome.SUCCESS;
         }
 

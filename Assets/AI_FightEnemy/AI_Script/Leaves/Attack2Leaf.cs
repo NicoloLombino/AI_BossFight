@@ -11,18 +11,26 @@ public class Attack2Leaf : Leaf
         //{
         //    return Outcome.FAIL;
         //}
-
+        Debug.Log("ATTACK 2 " + Time.time);
+        int fixSpeedOnRage = 1;
+        if(agent.GetComponent<EnemyMonster>().hasRageMode)
+        {
+            fixSpeedOnRage = 2;
+        }
         agent.GetComponent<EnemyMonster>().LookAtTarget();
         agent.GetComponent<Animator>().SetTrigger("Attack2");
-        foreach(GameObject col in colliders)
+        await Task.Delay((int)((1 / fixSpeedOnRage) * 1000));
+        foreach (GameObject col in colliders)
         {
             col.SetActive(true);
         }
-        await Task.Delay((int)(3 * 1000));
+        await Task.Delay((int)(1.5  * 1000));
         foreach (GameObject col in colliders)
         {
             col.SetActive(false);
         }
+        await Task.Delay((int)(1 * 1000));
+        Debug.Log("ATTACK 2 FINE" + Time.time);
         return Outcome.SUCCESS;
     }
 }

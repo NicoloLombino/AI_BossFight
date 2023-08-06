@@ -6,10 +6,11 @@ public class MonsterAttackCollider : MonoBehaviour
 {
 
     public int damage;
+    public bool canDoDamage = true; 
 
     void Start()
     {
-        
+        canDoDamage = true;
     }
 
     void Update()
@@ -17,11 +18,20 @@ public class MonsterAttackCollider : MonoBehaviour
         
     }
 
+    private void OnDisable()
+    {
+        canDoDamage = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerArcher>().ReceiveDamage(damage);
+            if(canDoDamage)
+            {
+                other.gameObject.GetComponent<PlayerArcher>().ReceiveDamage(damage);
+                canDoDamage = false;
+            }
         }
     }
 }
