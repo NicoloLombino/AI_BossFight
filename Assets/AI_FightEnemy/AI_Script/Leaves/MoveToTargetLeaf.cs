@@ -37,6 +37,7 @@ public class MoveToTargetLeaf : Leaf
             runTimer += Time.deltaTime;
             await Task.Delay((int)(Time.fixedDeltaTime * 1000));
         }
+        runTimer = 0;
         navMeshAgent.speed = 3.5f;
         navMeshAgent.isStopped = true;
         Debug.Log("END MOVE TO TARGET");

@@ -23,11 +23,12 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Enemy"))
+        //if(other.CompareTag("Enemy"))
+        if(other.gameObject.layer == 13)
         {
             if(isPlayer)
             {
-                other.gameObject.GetComponent<EnemyMonster>().ReceiveDamage(damage);
+                other.gameObject.GetComponentInParent<EnemyMonster>().ReceiveDamage(damage);
                 Debug.Log(damage);
             }
         }

@@ -9,7 +9,11 @@ public class PlayerArcher : MonoBehaviour
     [SerializeField]
     private float speed;
     [SerializeField]
+    private float rollingSpeed;
+    [SerializeField]
     private float rotationSpeed;
+    [SerializeField]
+    private Transform cameraTransForm;
 
     [Header("Equip")]
     [SerializeField]
@@ -36,6 +40,7 @@ public class PlayerArcher : MonoBehaviour
     private Vector3 playerVelocityY = new Vector3(0,-10,0);
     private Vector3 direction;
     private bool isRolling;
+    private Vector3 startDirectionWhenRoll;
 
     private void Awake()
     {
@@ -83,7 +88,11 @@ public class PlayerArcher : MonoBehaviour
 
     private void ReadMovement()
     {
-        direction = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
+        if (!isRolling)
+        {
+            direction = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
+        }
+     
         cc.Move(direction.normalized * speed * Time.deltaTime);
         //transform.LookAt(transform.position + direction, Vector3.up);
         if(!isRolling)
@@ -91,7 +100,12 @@ public class PlayerArcher : MonoBehaviour
             anim.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
             anim.SetFloat("Vertical", Input.GetAxis("Vertical"));
         }
-        transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed);
+
+        if(!Input.GetMouseButton(1))
+        {
+            transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed);
+        }
+
         cc.Move(playerVelocityY * Time.deltaTime);
         if(direction.magnitude > 0f && isRunning)
         {
@@ -171,8 +185,17 @@ public class PlayerArcher : MonoBehaviour
     public void ReceiveDamage(int damage, float timerToDisable)
     {
         health -= damage;
-        anim.SetTrigger("isHurt");
-        StartCoroutine(ReceiveDamageCoroutine(timerToDisable));
+        if(health <= 0)
+        {
+            anim.SetTrigger("Death");
+            isReceivingDamage = true;
+            Physics.IgnoreLayerCollision(11, 12, true);
+        }
+        else
+        {
+            anim.SetTrigger("isHurt");
+            StartCoroutine(ReceiveDamageCoroutine(timerToDisable));
+        }
     }
 
     public IEnumerator ReceiveDamageCoroutine(float disableTimer)
@@ -189,22 +212,25 @@ public class PlayerArcher : MonoBehaviour
         if (currentStamina <= 0 || !canShoot || isRolling)
             return;
 
-        Physics.IgnoreLayerCollision(11, 12, true);
+        Physics.IgnoreLayerCollision(11, 12, true);     
         currentStamina -= rollingStaminaUsed;
-        currentStamina = Mathf.Max(currentStamina, 0);
-        isRolling = true;
+        currentStamina = Mathf.Max(currentStamina, 0);       
         transform.forward = direction;
+        speed += rollingSpeed;
+        isRolling = true;
         playerVelocityY.y = Mathf.Sqrt(rollHeight * -1.0f * -10);
         anim.SetTrigger("Roll");
         StartCoroutine(EndRolling());
     }
 
     private IEnumerator EndRolling()
-    {
+    {       
+        yield return new WaitForSecondsRealtime(0.5f);
         playerVelocityY = new Vector3(0, -10, 0);
-        yield return new WaitForSecondsRealtime(1f);
         Physics.IgnoreLayerCollision(11, 12, false);      
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(1f);
+        speed -= rollingSpeed;
+        transform.forward = cameraTransForm.forward;
         anim.SetFloat("Horizontal", 0);
         anim.SetFloat("Vertical", 0);
         isRolling = false;

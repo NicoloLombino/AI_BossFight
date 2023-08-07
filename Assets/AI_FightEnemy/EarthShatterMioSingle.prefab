@@ -33247,6 +33247,7 @@ GameObject:
   - component: {fileID: 4399962924923296031}
   - component: {fileID: -5829984167050756563}
   - component: {fileID: 1439896296295624941}
+  - component: {fileID: -7929894644072980543}
   m_Layer: 12
   m_Name: EarthShatterMioSingle
   m_TagString: Untagged
@@ -38162,3 +38163,16 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 1}
+--- !u!114 &-7929894644072980543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4598099539598336349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0890839c000a094cabf350b10f91a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 2

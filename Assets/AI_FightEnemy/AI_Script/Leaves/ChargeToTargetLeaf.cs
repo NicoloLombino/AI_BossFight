@@ -57,6 +57,7 @@ public class ChargeToTargetLeaf : Leaf
             finalAttackCollider.SetActive(false);
             GameObject attackDistance = Instantiate(finalAttackParticles, finalAttackHole.position, finalAttackHole.rotation);
         }
+        runTimer = 0;
         chargeCollider.SetActive(false);
         navMeshAgent.speed = 3.5f * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         navMeshAgent.isStopped = true;

@@ -51,6 +51,7 @@ public class MoveToPositionLeaf : Leaf
             }
             await Task.Delay((int)(Time.fixedDeltaTime * 1000));
         }
+        runTimer = 0;
         agent.GetComponent<Animator>().SetFloat("Walking", 0f);
         navMeshAgent.isStopped = true;
         return Outcome.SUCCESS;
