@@ -15,6 +15,11 @@ public class ChargeToTargetLeaf : Leaf
     private GameObject chargeCollider;
     [SerializeField]
     private GameObject finalAttackCollider;
+    [SerializeField]
+    private GameObject finalAttackParticles;
+    [SerializeField]
+    private Transform finalAttackHole;
+
     public float maxRunTimer;
 
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
@@ -48,6 +53,7 @@ public class ChargeToTargetLeaf : Leaf
             await Task.Delay((int)(0.5 * 1000));
             agent.transform.position += transform.forward * 2;
             finalAttackCollider.SetActive(false);
+            GameObject attackDistance = Instantiate(finalAttackParticles, finalAttackHole.position, finalAttackHole.rotation);
         }
         chargeCollider.SetActive(false);
         navMeshAgent.speed = 3.5f * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;

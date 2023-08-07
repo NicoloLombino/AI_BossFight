@@ -6,7 +6,8 @@ public class MonsterAttackCollider : MonoBehaviour
 {
 
     public int damage;
-    public bool canDoDamage = true; 
+    public bool canDoDamage = true;
+    public float timerToDisablePlayer;
 
     void Start()
     {
@@ -29,7 +30,7 @@ public class MonsterAttackCollider : MonoBehaviour
         {
             if(canDoDamage)
             {
-                other.gameObject.GetComponent<PlayerArcher>().ReceiveDamage(damage);
+                other.gameObject.GetComponent<PlayerArcher>().ReceiveDamage(damage, timerToDisablePlayer);
                 canDoDamage = false;
             }
         }
