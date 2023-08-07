@@ -13,6 +13,9 @@ public class MoveToPositionLeaf : Leaf
     [Header("range of random walk")]
     [SerializeField] private float MinRange;
     [SerializeField] private float MaxRange;
+
+    private float runTimer;
+
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
     {
         Debug.Log("AAA");
@@ -34,9 +37,18 @@ public class MoveToPositionLeaf : Leaf
         agent.GetComponent<Animator>().SetFloat("Walking", 1f);
         navMeshAgent.SetDestination(position);
         navMeshAgent.isStopped = false;
-
+        //agent.transform.LookAt(position);
         while(Vector3.Distance(agent.transform.position, position) > acceptanceRange && !agent.GetComponent<EnemyMonster>().hasTarget)
         {
+            runTimer += Time.deltaTime;
+            if (Physics.Raycast(transform.position + Vector3.up * 1, position, out RaycastHit hit, 5, LayerMask.GetMask("Default")))
+            {
+                break;
+            }
+            if(runTimer > 1 && Physics.Raycast(transform.position + Vector3.up * 1, transform.forward, out RaycastHit hitF, 5, LayerMask.GetMask("Default")))
+            {
+                break;
+            }
             await Task.Delay((int)(Time.fixedDeltaTime * 1000));
         }
         agent.GetComponent<Animator>().SetFloat("Walking", 0f);

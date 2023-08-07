@@ -11,6 +11,7 @@ public class MoveToTargetLeaf : Leaf
     [SerializeField]
     private string targetBlackboardKey;
 
+    public float maxRunTimer;
     private float runTimer;
 
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
@@ -31,8 +32,9 @@ public class MoveToTargetLeaf : Leaf
         navMeshAgent.SetDestination(position);
         navMeshAgent.isStopped = false;
 
-        while (Vector3.Distance(agent.transform.position, position) > acceptanceRange)
+        while (Vector3.Distance(agent.transform.position, position) > acceptanceRange && runTimer < maxRunTimer)
         {
+            runTimer += Time.deltaTime;
             await Task.Delay((int)(Time.fixedDeltaTime * 1000));
         }
         navMeshAgent.speed = 3.5f;

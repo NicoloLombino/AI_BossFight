@@ -21,6 +21,7 @@ public class ChargeToTargetLeaf : Leaf
     private Transform finalAttackHole;
 
     public float maxRunTimer;
+    private float runTimer;
 
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
     {
@@ -41,8 +42,9 @@ public class ChargeToTargetLeaf : Leaf
         navMeshAgent.isStopped = false;
         chargeCollider.SetActive(true);
 
-        while (Vector3.Distance(agent.transform.position, position) > acceptanceRange)
+        while (Vector3.Distance(agent.transform.position, position) > acceptanceRange && runTimer < maxRunTimer)
         {
+            runTimer += Time.deltaTime;
             await Task.Delay((int)(Time.fixedDeltaTime * 1000));
         }
         if (agent.GetComponent<EnemyMonster>().hasRageMode)

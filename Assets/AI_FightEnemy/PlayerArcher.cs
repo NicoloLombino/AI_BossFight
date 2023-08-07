@@ -191,7 +191,7 @@ public class PlayerArcher : MonoBehaviour
 
         Physics.IgnoreLayerCollision(11, 12, true);
         currentStamina -= rollingStaminaUsed;
-        currentStamina = Mathf.Min(currentStamina, 0);
+        currentStamina = Mathf.Max(currentStamina, 0);
         isRolling = true;
         transform.forward = direction;
         playerVelocityY.y = Mathf.Sqrt(rollHeight * -1.0f * -10);
