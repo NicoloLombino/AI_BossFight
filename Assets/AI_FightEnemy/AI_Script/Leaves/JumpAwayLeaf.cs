@@ -23,7 +23,7 @@ public class JumpAwayLeaf : Leaf
 
         agent.GetComponent<Animator>().SetTrigger("JumpAway");
         agent.GetComponent<EnemyMonster>().JumpAway();
-        await Task.Delay((int)(10 * 1000));
+        await Task.Delay((int)(20 * 1000));
         return Outcome.SUCCESS;
     }
 }

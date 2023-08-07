@@ -15,8 +15,9 @@ public class MoveToPositionLeaf : Leaf
     [SerializeField] private float MaxRange;
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
     {
-        Vector3 position = new Vector3(Random.Range(MinRange, MaxRange)
-            * Mathf.Sign(Random.Range(-1, 1)), 0, Random.Range(MinRange, MaxRange)
+        Debug.Log("AAA");
+        Vector3 position = new Vector3(transform.position.x + Random.Range(MinRange, MaxRange)
+            * Mathf.Sign(Random.Range(-1, 1)), 0, transform.position.z + Random.Range(MinRange, MaxRange)
             * Mathf.Sign(Random.Range(-1, 1)));
 
 
@@ -28,13 +29,13 @@ public class MoveToPositionLeaf : Leaf
         if (agent.GetComponent<EnemyMonster>().hasTarget)
         {
             return Outcome.FAIL;
-        }
+        }  
 
         agent.GetComponent<Animator>().SetFloat("Walking", 1f);
         navMeshAgent.SetDestination(position);
         navMeshAgent.isStopped = false;
 
-        while(Vector3.Distance(agent.transform.position, position) > acceptanceRange)
+        while(Vector3.Distance(agent.transform.position, position) > acceptanceRange && !agent.GetComponent<EnemyMonster>().hasTarget)
         {
             await Task.Delay((int)(Time.fixedDeltaTime * 1000));
         }

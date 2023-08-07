@@ -95,6 +95,11 @@ public class EnemyMonster : MonoBehaviour
             anim.SetTrigger("Death");
             agent.enabled = false;
         }
+
+        if (!hasTarget)
+        {
+            hasTarget = true;
+        }
     }
 
     public void LookAtTarget()

@@ -93,7 +93,6 @@ public class PlayerArcher : MonoBehaviour
         }
         transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed);
         cc.Move(playerVelocityY * Time.deltaTime);
-        Debug.Log(direction.magnitude);
         if(direction.magnitude > 0f && isRunning)
         {
             currentStamina -= Time.deltaTime;
@@ -190,8 +189,6 @@ public class PlayerArcher : MonoBehaviour
         if (currentStamina <= 0 || !canShoot || isRolling)
             return;
 
-        anim.SetFloat("Horizontal", 0);
-        anim.SetFloat("Vertical", 0);
         Physics.IgnoreLayerCollision(11, 12, true);
         currentStamina -= rollingStaminaUsed;
         currentStamina = Mathf.Min(currentStamina, 0);
@@ -208,6 +205,8 @@ public class PlayerArcher : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
         Physics.IgnoreLayerCollision(11, 12, false);      
         yield return new WaitForSecondsRealtime(1.5f);
+        anim.SetFloat("Horizontal", 0);
+        anim.SetFloat("Vertical", 0);
         isRolling = false;
     }
 }
