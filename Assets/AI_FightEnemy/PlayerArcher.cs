@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerArcher : MonoBehaviour
 {
     CharacterController cc;
     Animator anim;
+
     [SerializeField]
     private float speed;
     [SerializeField]
@@ -30,6 +32,7 @@ public class PlayerArcher : MonoBehaviour
     public bool isReceivingDamage;
 
     [Header("Personalize")]
+    public float healthMax = 100;
     public float staminaMax = 5;
     public float maxBowCharge = 5;
     [SerializeField]
@@ -37,10 +40,15 @@ public class PlayerArcher : MonoBehaviour
     [SerializeField]
     private float rollingStaminaUsed;
 
+    [Header("UI elements")]
+    [SerializeField]
+    private Slider healthSlider;
+    [SerializeField]
+    private Slider staminaSlider;
+
     private Vector3 playerVelocityY = new Vector3(0,-10,0);
     private Vector3 direction;
     private bool isRolling;
-    private Vector3 startDirectionWhenRoll;
 
     private void Awake()
     {
@@ -101,7 +109,7 @@ public class PlayerArcher : MonoBehaviour
             anim.SetFloat("Vertical", Input.GetAxis("Vertical"));
         }
 
-        if(!Input.GetMouseButton(1))
+        if(!Input.GetMouseButton(1) && !isRolling)
         {
             transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed);
         }
@@ -110,6 +118,7 @@ public class PlayerArcher : MonoBehaviour
         if(direction.magnitude > 0f && isRunning)
         {
             currentStamina -= Time.deltaTime;
+            UpdateStaminaBar();
             if(currentStamina <= 0)
             {
                 currentStamina = 0; 
@@ -120,6 +129,7 @@ public class PlayerArcher : MonoBehaviour
         {
             currentStamina += Time.deltaTime;
             currentStamina = Mathf.Min(currentStamina, staminaMax);
+            UpdateStaminaBar();
         }
 
         if(Input.GetKeyDown(KeyCode.Space))
@@ -185,7 +195,8 @@ public class PlayerArcher : MonoBehaviour
     public void ReceiveDamage(int damage, float timerToDisable)
     {
         health -= damage;
-        if(health <= 0)
+        UpdateHealthBar();
+        if (health <= 0)
         {
             anim.SetTrigger("Death");
             isReceivingDamage = true;
@@ -212,6 +223,7 @@ public class PlayerArcher : MonoBehaviour
         if (currentStamina <= 0 || !canShoot || isRolling)
             return;
 
+        cameraTransForm.GetComponentInParent<CameraParent>().isLocked = true;
         Physics.IgnoreLayerCollision(11, 12, true);     
         currentStamina -= rollingStaminaUsed;
         currentStamina = Mathf.Max(currentStamina, 0);       
@@ -220,6 +232,7 @@ public class PlayerArcher : MonoBehaviour
         isRolling = true;
         playerVelocityY.y = Mathf.Sqrt(rollHeight * -1.0f * -10);
         anim.SetTrigger("Roll");
+        UpdateStaminaBar();
         StartCoroutine(EndRolling());
     }
 
@@ -234,6 +247,17 @@ public class PlayerArcher : MonoBehaviour
         anim.SetFloat("Horizontal", 0);
         anim.SetFloat("Vertical", 0);
         isRolling = false;
+        cameraTransForm.GetComponentInParent<CameraParent>().isLocked = false;
+    }
+
+    private void UpdateHealthBar()
+    {
+        healthSlider.value = health / healthMax;
+    }
+
+    private void UpdateStaminaBar()
+    {
+        staminaSlider.value = currentStamina / staminaMax;
     }
 }
 
