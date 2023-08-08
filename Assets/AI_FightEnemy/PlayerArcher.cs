@@ -21,10 +21,14 @@ public class PlayerArcher : MonoBehaviour
     [Header("Equip")]
     [SerializeField]
     private Rifle bow;
+    [SerializeField]
+    private int potionNumber;
 
     [Header("values")]
     bool canShoot = true;
     public bool isRunning;
+    [SerializeField]
+    private int potionHeal;
 
     [Header("Stats")]
     public float health = 100;
@@ -46,6 +50,8 @@ public class PlayerArcher : MonoBehaviour
     private Slider healthSlider;
     [SerializeField]
     private Slider staminaSlider;
+    [SerializeField]
+    private Slider bowChargeSlider;
 
     [Header("audio clips")]
     [SerializeField] AudioClip walkClip;
@@ -100,6 +106,11 @@ public class PlayerArcher : MonoBehaviour
         else if(Input.GetKeyUp(KeyCode.LeftShift) && canShoot && isRunning && !isRolling)
         {
             RunMode(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.F) && canShoot && !isRunning && !isRolling)
+        {
+            UsePotion();
         }
     }
 
@@ -176,6 +187,7 @@ public class PlayerArcher : MonoBehaviour
         bow.arrowInBow.SetActive(false);
         canShoot = true;
         currentBowCharge = 0;
+        bowChargeSlider.value = 0;
     }
 
     private IEnumerator BowChargeCoroutine()
@@ -183,6 +195,7 @@ public class PlayerArcher : MonoBehaviour
         while (!canShoot)
         {
             currentBowCharge += Time.deltaTime;
+            bowChargeSlider.value = currentBowCharge / maxBowCharge;
             yield return null;
         }
     }
@@ -225,6 +238,7 @@ public class PlayerArcher : MonoBehaviour
             anim.SetTrigger("Death");
             isReceivingDamage = true;
             Physics.IgnoreLayerCollision(11, 12, true);
+            gameObject.tag = "Untagged";
         }
         else
         {
@@ -283,6 +297,25 @@ public class PlayerArcher : MonoBehaviour
     private void UpdateStaminaBar()
     {
         staminaSlider.value = currentStamina / staminaMax;
+    }
+
+    private void UsePotion()
+    {
+        if (potionNumber <= 0) return;
+
+        isReceivingDamage = true;
+        potionNumber--;
+        health += potionHeal;
+        health = Mathf.Min(health, healthMax);
+        anim.SetTrigger("Potion");
+        UpdateHealthBar();
+        StartCoroutine(UsingPotionCoroutine());
+    }
+
+    private IEnumerator UsingPotionCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        isReceivingDamage = false;
     }
 }
 

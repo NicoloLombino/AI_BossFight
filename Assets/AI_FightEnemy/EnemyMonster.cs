@@ -96,6 +96,8 @@ public class EnemyMonster : MonoBehaviour
             agent.enabled = false;
             gameObject.GetComponent<MonsterEyes>().enabled = false;
             hasTarget = false;
+            gameObject.tag = "Untagged";
+            gameObject.layer = 0;
         }
 
         if (!hasTarget)
