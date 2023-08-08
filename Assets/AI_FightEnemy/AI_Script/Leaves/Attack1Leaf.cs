@@ -28,9 +28,7 @@ public class Attack1Leaf : Leaf
         {
             col.SetActive(false);
         }
-        //Debug.Log("ATTACK 1");
         await Task.Delay(1 * 1000);
-        //Debug.Log("ATTACK 1 FINE AWAIT");
         return Outcome.SUCCESS;
     }
 }

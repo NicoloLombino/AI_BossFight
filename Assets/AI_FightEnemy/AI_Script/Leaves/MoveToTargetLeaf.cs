@@ -16,8 +16,6 @@ public class MoveToTargetLeaf : Leaf
 
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
     {
-        Debug.Log("START MOVE TO TARGET");
-
         Vector3 position = agent.GetComponent<EnemyMonster>().target.position;
 
 
@@ -40,7 +38,6 @@ public class MoveToTargetLeaf : Leaf
         runTimer = 0;
         navMeshAgent.speed = 3.5f;
         navMeshAgent.isStopped = true;
-        Debug.Log("END MOVE TO TARGET");
         agent.GetComponent<Animator>().SetFloat("Speed", 0);
         return Outcome.SUCCESS;
     }

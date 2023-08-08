@@ -94,6 +94,8 @@ public class EnemyMonster : MonoBehaviour
         {
             anim.SetTrigger("Death");
             agent.enabled = false;
+            gameObject.GetComponent<MonsterEyes>().enabled = false;
+            hasTarget = false;
         }
 
         if (!hasTarget)
@@ -120,7 +122,6 @@ public class EnemyMonster : MonoBehaviour
         while(Vector3.Distance(transform.position, position) > 2)
         {
             agent.transform.position += transform.forward * agent.speed * Time.deltaTime;
-            Debug.Log("coro = " +  Vector3.Distance(transform.position, position));
             yield return null;
         }
         isAttacking = false;
@@ -137,7 +138,6 @@ public class EnemyMonster : MonoBehaviour
         while (percentage < 1)
         {
             percentage += Time.deltaTime / 2;
-            Debug.Log("percentage =" + percentage);
             agent.transform.position = Vector3.Lerp(agent.transform.position, agent.transform.position + transform.up * 5, percentage);
             yield return null;
         }

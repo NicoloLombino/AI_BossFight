@@ -7,6 +7,7 @@ public class PlayerArcher : MonoBehaviour
 {
     CharacterController cc;
     Animator anim;
+    AudioSource audioSource;
 
     [SerializeField]
     private float speed;
@@ -46,6 +47,13 @@ public class PlayerArcher : MonoBehaviour
     [SerializeField]
     private Slider staminaSlider;
 
+    [Header("audio clips")]
+    [SerializeField] AudioClip walkClip;
+    [SerializeField] AudioClip runClip;
+    [SerializeField] AudioClip rollClip;
+    [SerializeField] AudioClip bowClip;
+    [SerializeField] AudioClip damageClip;
+
     private Vector3 playerVelocityY = new Vector3(0,-10,0);
     private Vector3 direction;
     private bool isRolling;
@@ -54,6 +62,7 @@ public class PlayerArcher : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -107,6 +116,18 @@ public class PlayerArcher : MonoBehaviour
         {
             anim.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
             anim.SetFloat("Vertical", Input.GetAxis("Vertical"));
+            
+            if(direction.magnitude > 0f)
+            {
+                if(!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                }
+            }
+            else
+            {
+                audioSource.Stop();
+            }
         }
 
         if(!Input.GetMouseButton(1) && !isRolling)
@@ -142,6 +163,7 @@ public class PlayerArcher : MonoBehaviour
     {
         canShoot = false;
         anim.SetBool("isAim", true);
+        audioSource.PlayOneShot(bowClip);
         bow.arrowInBow.SetActive(true);
         StartCoroutine(BowChargeCoroutine());
     }
@@ -190,12 +212,14 @@ public class PlayerArcher : MonoBehaviour
         isRunning = isRun;
         anim.SetBool("isRunning", isRun);
         speed = isRun ? speed + 2 : speed - 2;
+        audioSource.clip = isRun ? runClip : walkClip;
     }
 
     public void ReceiveDamage(int damage, float timerToDisable)
     {
         health -= damage;
         UpdateHealthBar();
+        audioSource.PlayOneShot(damageClip);
         if (health <= 0)
         {
             anim.SetTrigger("Death");
@@ -224,13 +248,14 @@ public class PlayerArcher : MonoBehaviour
             return;
 
         cameraTransForm.GetComponentInParent<CameraParent>().isLocked = true;
+        audioSource.PlayOneShot(rollClip);
         Physics.IgnoreLayerCollision(11, 12, true);     
         currentStamina -= rollingStaminaUsed;
         currentStamina = Mathf.Max(currentStamina, 0);       
         transform.forward = direction;
         speed += rollingSpeed;
         isRolling = true;
-        playerVelocityY.y = Mathf.Sqrt(rollHeight * -1.0f * -10);
+        //playerVelocityY.y = Mathf.Sqrt(rollHeight * -1.0f * -10);
         anim.SetTrigger("Roll");
         UpdateStaminaBar();
         StartCoroutine(EndRolling());
@@ -239,7 +264,7 @@ public class PlayerArcher : MonoBehaviour
     private IEnumerator EndRolling()
     {       
         yield return new WaitForSecondsRealtime(0.5f);
-        playerVelocityY = new Vector3(0, -10, 0);
+        //playerVelocityY = new Vector3(0, -10, 0);
         Physics.IgnoreLayerCollision(11, 12, false);      
         yield return new WaitForSecondsRealtime(1f);
         speed -= rollingSpeed;

@@ -25,8 +25,6 @@ public class ChargeToTargetLeaf : Leaf
 
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
     {
-        Debug.Log("START CHARGE TO TARGET");
-
         Vector3 position = agent.GetComponent<EnemyMonster>().target.position;
 
 
@@ -61,7 +59,6 @@ public class ChargeToTargetLeaf : Leaf
         chargeCollider.SetActive(false);
         navMeshAgent.speed = 3.5f * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         navMeshAgent.isStopped = true;
-        Debug.Log("END CHARGE TO TARGET");
         agent.GetComponent<Animator>().SetTrigger("StopCharge");
         return Outcome.SUCCESS;
     }

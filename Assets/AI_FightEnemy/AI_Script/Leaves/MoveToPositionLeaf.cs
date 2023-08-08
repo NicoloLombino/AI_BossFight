@@ -18,7 +18,6 @@ public class MoveToPositionLeaf : Leaf
 
     public async override Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
     {
-        Debug.Log("AAA");
         Vector3 position = new Vector3(transform.position.x + Random.Range(MinRange, MaxRange)
             * Mathf.Sign(Random.Range(-1, 1)), 0, transform.position.z + Random.Range(MinRange, MaxRange)
             * Mathf.Sign(Random.Range(-1, 1)));

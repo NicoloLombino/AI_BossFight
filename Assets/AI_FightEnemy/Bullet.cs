@@ -9,11 +9,14 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     public int damage;
 
+    AudioSource audioSource;
+    public AudioClip hitClip;
+
     public bool isPlayer;
 
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -28,8 +31,9 @@ public class Bullet : MonoBehaviour
         {
             if(isPlayer)
             {
-                other.gameObject.GetComponentInParent<EnemyMonster>().ReceiveDamage(damage);
+                other.gameObject.GetComponent<MonsterHitPoint>().ReceiveDamageOnPoint(damage);
                 Debug.Log(damage);
+                audioSource.PlayOneShot(hitClip);
             }
         }
     }

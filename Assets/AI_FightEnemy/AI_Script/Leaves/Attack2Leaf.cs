@@ -11,7 +11,6 @@ public class Attack2Leaf : Leaf
         //{
         //    return Outcome.FAIL;
         //}
-        Debug.Log("ATTACK 2 " + Time.time);
         int fixSpeedOnRage = 1;
         if(agent.GetComponent<EnemyMonster>().hasRageMode)
         {
@@ -30,7 +29,6 @@ public class Attack2Leaf : Leaf
             col.SetActive(false);
         }
         await Task.Delay((int)(1 * 1000));
-        Debug.Log("ATTACK 2 FINE" + Time.time);
         return Outcome.SUCCESS;
     }
 }
