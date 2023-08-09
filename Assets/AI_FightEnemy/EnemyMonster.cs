@@ -6,13 +6,17 @@ using UnityEngine.AI;
 public class EnemyMonster : MonoBehaviour
 {
     NavMeshAgent agent;
-    public Animator anim;
+    Animator anim;
 
     [SerializeField]
     public Transform target;
 
     public bool hasTarget;
     public bool isTargetInRange;
+    [SerializeField]
+    private SkinnedMeshRenderer mesh;
+    [SerializeField]
+    private GameObject leftHand;
 
     [Header("Stats")]
     [SerializeField]
@@ -23,6 +27,8 @@ public class EnemyMonster : MonoBehaviour
     public bool shouldMove;
     public Transform positionToReach;
     public bool isAttacking;
+    [SerializeField]
+    private int numberOfRage;
 
     [Header("Personalize")]
     [SerializeField]
@@ -37,7 +43,12 @@ public class EnemyMonster : MonoBehaviour
     [SerializeField]
     private GameObject rageLight;
     [SerializeField]
-    private Material material;
+    private Material materialBase;
+    [SerializeField]
+    private Material materialRage;
+
+
+    public int areaWhereIsThisMonster;
 
 
     private float rageTimer;
@@ -46,8 +57,9 @@ public class EnemyMonster : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        healthToRunAway = maxHealth * (percentageToRunAway / 100);
-        material.color = Color.white;
+        healthToRunAway = Mathf.RoundToInt(maxHealth * (percentageToRunAway / 100));
+        //material.color = Color.white;
+        mesh.material = materialBase;
     }
 
     void Update()
@@ -61,10 +73,11 @@ public class EnemyMonster : MonoBehaviour
                 rageValue = 0;
                 rageTimer = 0;
                 rageValueIncrementWhenHit += 2;
-                material.color = Color.white;
+                mesh.material = materialBase;
                 rageLight.SetActive(false);
                 anim.speed = 1;
                 RageSpeedIncrement = 1;
+                leftHand.transform.localScale = new Vector3(1,1,1);
                 //anim.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.
                 //    Instantiate(Resources.Load("Animation/Mutant Animator.controller", typeof(RuntimeAnimatorController)));
             }
@@ -82,11 +95,16 @@ public class EnemyMonster : MonoBehaviour
             {
                 hasRageMode = true;
                 rageLight.SetActive(true);
-                material.color = Color.red;
+                mesh.material = materialRage;
                 anim.speed = 2;
                 RageSpeedIncrement = 1.5f;
+                numberOfRage++;
                 //anim.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.
                 //    Instantiate(Resources.Load("Animation/MutantRage Animator.controller", typeof(RuntimeAnimatorController)));
+                if (numberOfRage >= 2)
+                {
+                    leftHand.transform.localScale = new Vector3(2, 2, 2);
+                }
             }
         }
 
@@ -98,11 +116,12 @@ public class EnemyMonster : MonoBehaviour
             hasTarget = false;
             gameObject.tag = "Untagged";
             gameObject.layer = 0;
+            enabled = false;
         }
 
         if (!hasTarget)
         {
-            hasTarget = true;
+            SetFindTarget(true);
         }
     }
 
@@ -143,8 +162,48 @@ public class EnemyMonster : MonoBehaviour
             agent.transform.position = Vector3.Lerp(agent.transform.position, agent.transform.position + transform.up * 5, percentage);
             yield return null;
         }
-        transform.position = new Vector3(230, 0, 0);
-        hasTarget = false;
+
+        int rnd = 0;
+        bool canGo = false;
+        while(!canGo)
+        {
+            rnd = Random.Range(0, 4);
+            if(rnd != areaWhereIsThisMonster)
+            {
+                canGo = true;
+            }
+        }
+
+        switch(rnd)
+        {
+            case 0: transform.position = new Vector3(15, 0, -135);
+                break;
+            case 1:
+                transform.position = new Vector3(125, 0, -130);
+                break;
+            case 2:
+                transform.position = new Vector3(130, 0, -15);
+                break;
+            case 3:
+                transform.position = new Vector3(5, 0, -5);
+                break;
+        }
+        gameObject.GetComponent<EnemyMonster>().SetFindTarget(false);
         hasRageMode = false;
+        healthToRunAway = Mathf.RoundToInt(currentHealth * (percentageToRunAway / 100));
+    }
+
+    public void SetFindTarget(bool find)
+    {
+        hasTarget = find;
+        target.gameObject.GetComponent<PlayerArcher>().enemyEyeWhenSeePlayer.SetActive(find);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Area"))
+        {
+            areaWhereIsThisMonster = other.gameObject.GetComponent<AreaTrigger>().areaNumber;
+        }
     }
 }

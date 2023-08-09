@@ -17,6 +17,7 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        Destroy(gameObject, 3);
     }
 
     void Update()
@@ -31,6 +32,11 @@ public class Bullet : MonoBehaviour
         {
             if(isPlayer)
             {
+                if (other.gameObject.GetComponentInParent<EnemyMonster>().currentHealth <= 0)
+                {
+                    return;
+                }
+
                 other.gameObject.GetComponent<MonsterHitPoint>().ReceiveDamageOnPoint(damage);
                 Debug.Log(damage);
                 audioSource.PlayOneShot(hitClip);

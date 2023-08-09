@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerArcher : MonoBehaviour
 {
@@ -52,6 +53,11 @@ public class PlayerArcher : MonoBehaviour
     private Slider staminaSlider;
     [SerializeField]
     private Slider bowChargeSlider;
+    [SerializeField]
+    private TextMeshProUGUI potionText;
+    [SerializeField]
+    private GameObject deathPanel;
+    public GameObject enemyEyeWhenSeePlayer;
 
     [Header("audio clips")]
     [SerializeField] AudioClip walkClip;
@@ -239,6 +245,8 @@ public class PlayerArcher : MonoBehaviour
             isReceivingDamage = true;
             Physics.IgnoreLayerCollision(11, 12, true);
             gameObject.tag = "Untagged";
+            deathPanel.SetActive(true);
+            enabled = false;
         }
         else
         {
@@ -305,6 +313,7 @@ public class PlayerArcher : MonoBehaviour
 
         isReceivingDamage = true;
         potionNumber--;
+        potionText.text = potionNumber.ToString();
         health += potionHeal;
         health = Mathf.Min(health, healthMax);
         anim.SetTrigger("Potion");

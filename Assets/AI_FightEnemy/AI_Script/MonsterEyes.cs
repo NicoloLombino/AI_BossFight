@@ -30,7 +30,7 @@ public class MonsterEyes : MonoBehaviour
                 continue;
 
             targets.Add(e.gameObject);
-            gameObject.GetComponent<EnemyMonster>().hasTarget = true;
+            gameObject.GetComponent<EnemyMonster>().SetFindTarget(true);
             gameObject.GetComponent<EnemyMonster>().isTargetInRange = true;
         }
 

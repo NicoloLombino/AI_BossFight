@@ -4,4 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/AI_FightEnemy/Logo.unity
+    guid: a76ca86510b2fe2459bd3fcef483a8cb
+  - enabled: 1
+    path: Assets/AI_FightEnemy/Menu.unity
+    guid: 0cc88b9284f67254c8153a57541a8541
+  - enabled: 1
+    path: Assets/AI_FightEnemy/AI_FightEnemy.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  m_configObjects: {}
