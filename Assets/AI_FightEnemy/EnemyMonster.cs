@@ -64,7 +64,7 @@ public class EnemyMonster : MonoBehaviour
 
     void Update()
     {
-        if(hasRageMode)
+        if(hasRageMode && numberOfRage <= 4)
         {
             rageTimer += Time.deltaTime;
             if(rageTimer >= MaxRageTimer)

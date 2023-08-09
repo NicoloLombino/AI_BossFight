@@ -24,7 +24,7 @@ public class MoveToTargetLeaf : Leaf
             return Outcome.FAIL;
         }
 
-        navMeshAgent.speed = 10;
+        navMeshAgent.speed = 10 * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         agent.GetComponent<EnemyMonster>().LookAtTarget();
         agent.GetComponent<Animator>().SetFloat("Speed", 1);
         navMeshAgent.SetDestination(position);
@@ -36,7 +36,7 @@ public class MoveToTargetLeaf : Leaf
             await Task.Delay((int)(Time.fixedDeltaTime * 1000));
         }
         runTimer = 0;
-        navMeshAgent.speed = 3.5f;
+        navMeshAgent.speed = 4 * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         navMeshAgent.isStopped = true;
         agent.GetComponent<Animator>().SetFloat("Speed", 0);
         return Outcome.SUCCESS;

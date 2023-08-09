@@ -46,14 +46,21 @@ public class MonsterEyes : MonoBehaviour
         //return targets;
     }
 
-    private void OnDrawGizmos()
-    {
-        Vector3 pos = transform.position + Vector3.up;
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(pos, Quaternion.Euler(0, -fov / 2, 0) * transform.forward * range);
-        Gizmos.DrawRay(pos, Quaternion.Euler(0, fov / 2, 0) * transform.forward * range);
-        Handles.color = Color.blue;
-        Handles.DrawWireArc(pos, transform.up, Quaternion.Euler(0, -fov / 2, 0) * transform.forward, fov, range);
-    }
+    // ------------------------------------- READ ME ------------------------------------------------------
+    /// <summary>
+    /// ----------------------------------------------------------------------------------------------------
+    /// --------------------- USE THIS ON EDITOR TO SEE THE FOW OF THE ENEMY -------------------------------
+    /// --------------------- I DON'T KNOW WHY HANDLES GIVE ME AN ERROR IN BUILD ---------------------------
+    /// --------------------- I NEED TO FIX BUT IN BUILD THIS IS "INVISIBLE" -------------------------------
+    /// </summary>
+    //private void OnDrawGizmos()
+    //{
+    //    Vector3 pos = transform.position + Vector3.up;
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawRay(pos, Quaternion.Euler(0, -fov / 2, 0) * transform.forward * range);
+    //    Gizmos.DrawRay(pos, Quaternion.Euler(0, fov / 2, 0) * transform.forward * range);
+    //    Handles.color = Color.blue;
+    //    Handles.DrawWireArc(pos, transform.up, Quaternion.Euler(0, -fov / 2, 0) * transform.forward, fov, range);
+    //}
 }
 

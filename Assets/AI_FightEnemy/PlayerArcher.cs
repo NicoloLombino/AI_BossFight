@@ -196,6 +196,7 @@ public class PlayerArcher : MonoBehaviour
         canShoot = true;
         currentBowCharge = 0;
         bowChargeSlider.value = 0;
+        StopCoroutine(BowChargeCoroutine());
     }
 
     private IEnumerator BowChargeCoroutine()
@@ -263,9 +264,13 @@ public class PlayerArcher : MonoBehaviour
     public IEnumerator ReceiveDamageCoroutine(float disableTimer)
     {
         isReceivingDamage = true;
+        canShoot = true;
         yield return new WaitForSecondsRealtime(disableTimer);
         anim.SetFloat("Horizontal", 0);
         anim.SetFloat("Vertical", 0);
+        anim.SetBool("isAim", false);
+        anim.SetBool("isRunning", false);
+        //anim.SetFloat("BLend", 1);
         isReceivingDamage = false;
     }
 

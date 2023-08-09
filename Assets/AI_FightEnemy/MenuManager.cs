@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    private void Start()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
     public void LoadSceneByName(string level)
     {
         SceneManager.LoadScene(level, LoadSceneMode.Single);

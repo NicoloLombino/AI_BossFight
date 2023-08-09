@@ -33,7 +33,7 @@ public class ChargeToTargetLeaf : Leaf
             return Outcome.FAIL;
         }
 
-        navMeshAgent.speed = 50 * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
+        navMeshAgent.speed = 40 * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         agent.GetComponent<EnemyMonster>().LookAtTarget();
         agent.GetComponent<Animator>().SetTrigger("Charge");
         navMeshAgent.SetDestination(position);
@@ -57,7 +57,7 @@ public class ChargeToTargetLeaf : Leaf
         }
         runTimer = 0;
         chargeCollider.SetActive(false);
-        navMeshAgent.speed = 5f * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
+        navMeshAgent.speed = 4f * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         navMeshAgent.isStopped = true;
         agent.GetComponent<Animator>().SetTrigger("StopCharge");
         return Outcome.SUCCESS;
