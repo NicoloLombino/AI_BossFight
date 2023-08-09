@@ -8,6 +8,8 @@ public class Bullet : MonoBehaviour
     private float speed;
     [SerializeField]
     public int damage;
+    [SerializeField]
+    private GameObject hitParticles;
 
     AudioSource audioSource;
     public AudioClip hitClip;
@@ -34,12 +36,14 @@ public class Bullet : MonoBehaviour
             {
                 if (other.gameObject.GetComponentInParent<EnemyMonster>().currentHealth <= 0)
                 {
+                    GameObject part1 = Instantiate(hitParticles, transform.position, Quaternion.identity);
                     return;
                 }
 
                 other.gameObject.GetComponent<MonsterHitPoint>().ReceiveDamageOnPoint(damage);
                 Debug.Log(damage);
                 audioSource.PlayOneShot(hitClip);
+                GameObject part = Instantiate(hitParticles, transform.position, Quaternion.identity);
             }
         }
     }

@@ -45,6 +45,8 @@ public class PlayerArcher : MonoBehaviour
     private float rollHeight;
     [SerializeField]
     private float rollingStaminaUsed;
+    [SerializeField]
+    private GameObject healParticles;
 
     [Header("UI elements")]
     [SerializeField]
@@ -239,6 +241,9 @@ public class PlayerArcher : MonoBehaviour
         health -= damage;
         UpdateHealthBar();
         audioSource.PlayOneShot(damageClip);
+        currentBowCharge = 0;
+        StopCoroutine(BowChargeCoroutine());
+
         if (health <= 0)
         {
             anim.SetTrigger("Death");
@@ -317,6 +322,7 @@ public class PlayerArcher : MonoBehaviour
         health += potionHeal;
         health = Mathf.Min(health, healthMax);
         anim.SetTrigger("Potion");
+        healParticles.SetActive(true);
         UpdateHealthBar();
         StartCoroutine(UsingPotionCoroutine());
     }
@@ -325,6 +331,7 @@ public class PlayerArcher : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1f);
         isReceivingDamage = false;
+        healParticles.SetActive(false);
     }
 }
 

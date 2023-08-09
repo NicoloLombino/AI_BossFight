@@ -66,6 +66,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   damage: 3
+  hitParticles: {fileID: 5616470881621905308, guid: 1da0b250c6ac9d74aa86b862be654c6e,
+    type: 3}
   hitClip: {fileID: 8300000, guid: 1bd3d9c2c5dab5f4590cb246383344b7, type: 3}
   isPlayer: 1
 --- !u!65 &6912494523542403896
