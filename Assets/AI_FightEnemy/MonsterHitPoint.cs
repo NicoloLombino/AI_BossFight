@@ -5,8 +5,8 @@ using UnityEngine;
 public class MonsterHitPoint : MonoBehaviour
 {
     [SerializeField]
-    [Min(0)]
-    private float weaknessMultiplier;
+    [Min(0.1f)]
+    public float weaknessMultiplier;
     [SerializeField]
     private EnemyMonster monster;
 
@@ -25,5 +25,6 @@ public class MonsterHitPoint : MonoBehaviour
     {
         float realDamage = damage * weaknessMultiplier;
         monster.ReceiveDamage((int)realDamage);
+        Debug.Log("damage= " + realDamage);
     }
 }

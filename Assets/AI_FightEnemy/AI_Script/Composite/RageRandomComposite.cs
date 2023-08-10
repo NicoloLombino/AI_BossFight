@@ -7,6 +7,7 @@ public class RageRandomComposite : Composite
 {
     public override async Task<Outcome> Run(GameObject agent, Dictionary<string, object> blackboard)
     {
+        Debug.Log("RAGE RANDOM COMPOSITE");
         int currentRageValue = agent.GetComponent<EnemyMonster>().rageValue;
         int rndMove = Random.Range(0, 101);
         //Debug.Log("rndMove = " + rndMove);
@@ -44,29 +45,27 @@ public class RageRandomComposite : Composite
         }
         else if (currentRageValue == 100)
         {
-            firstMove = 0;
-            secondMove = 40;
+            firstMove =  5;
+            secondMove = 45;
         }
 
         if(rndMove >= 0 && rndMove <= firstMove)
         {
-            //Debug.Log("PORCODIO 1");
             // first move
             child = 0;
         }
         if (rndMove > firstMove && rndMove <= secondMove)
         {
-            //Debug.Log("PORCODIO 2");
             // second move
             child = 1;
         }
         if (rndMove > secondMove)
         {
-            //Debug.Log("PORCODIO 3");
             // third move
             child = 2;
         }
 
+        Debug.Log("child = " + child);
         return await children[child].Run(agent, blackboard);
     }
 }

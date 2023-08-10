@@ -41,10 +41,25 @@ public class Bullet : MonoBehaviour
                 }
 
                 other.gameObject.GetComponent<MonsterHitPoint>().ReceiveDamageOnPoint(damage);
-                Debug.Log(damage);
                 audioSource.PlayOneShot(hitClip);
                 GameObject part = Instantiate(hitParticles, transform.position, Quaternion.identity);
+
+                // increase the scale of particles with the damage
+                foreach (Transform t in part.transform)
+                {
+                    t.transform.localScale += Vector3.one * 0.05f * damage * other.gameObject.GetComponent<MonsterHitPoint>().weaknessMultiplier * 1.5f;
+
+                }
+                part.transform.localScale += Vector3.one * 0.2f * damage * other.gameObject.GetComponent<MonsterHitPoint>().weaknessMultiplier * 1.5f;
+                Debug.Log("scale particles = " + part.transform.localScale);
+                isPlayer = false;
+                Destroy(gameObject, 0.1f);
             }
+        }
+
+        if(other.gameObject.layer == 0)
+        {
+            Destroy(gameObject);
         }
     }
 }

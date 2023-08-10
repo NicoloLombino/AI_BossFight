@@ -55,11 +55,21 @@ public class ChargeToTargetLeaf : Leaf
             finalAttackCollider.SetActive(false);
             GameObject attackDistance = Instantiate(finalAttackParticles, finalAttackHole.position, finalAttackHole.rotation);
         }
+        else
+        {
+            if (!Physics.Raycast(transform.position + Vector3.up * 1, transform.forward, out RaycastHit hitF, 22, LayerMask.GetMask("Default")))
+            {
+                Debug.Log("ENTER");
+                navMeshAgent.SetDestination(agent.transform.position + transform.forward * 20);
+                await Task.Delay((int)(1f * 1000));
+            }
+        }
         runTimer = 0;
         chargeCollider.SetActive(false);
         navMeshAgent.speed = 4f * agent.GetComponent<EnemyMonster>().RageSpeedIncrement;
         navMeshAgent.isStopped = true;
         agent.GetComponent<Animator>().SetTrigger("StopCharge");
+        await Task.Delay((int)(1 * 1000));
         return Outcome.SUCCESS;
     }
 }

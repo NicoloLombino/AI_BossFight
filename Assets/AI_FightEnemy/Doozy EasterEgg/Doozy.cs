@@ -33,7 +33,7 @@ public class Doozy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("arrow"))
+        if(other.CompareTag("Arrow"))
         {
             if(!usedSpell)
             {

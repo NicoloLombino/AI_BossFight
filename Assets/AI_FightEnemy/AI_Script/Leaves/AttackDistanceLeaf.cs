@@ -40,7 +40,7 @@ public class AttackDistanceLeaf : Leaf
         {
             col.SetActive(false);
         }
-        await Task.Delay((int)((waitTime + 2) * 1000));
+        await Task.Delay((int)((waitTime + 0.5f) * 1000));
         return Outcome.SUCCESS;
     }
 }

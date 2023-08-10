@@ -167,9 +167,12 @@ public class PlayerArcher : MonoBehaviour
         }
         else
         {
-            currentStamina += Time.deltaTime;
-            currentStamina = Mathf.Min(currentStamina, staminaMax);
-            UpdateStaminaBar();
+            if(!isRolling)
+            {
+                currentStamina += Time.deltaTime * 2;
+                currentStamina = Mathf.Min(currentStamina, staminaMax);
+                UpdateStaminaBar();
+            }
         }
 
         if(Input.GetKeyDown(KeyCode.Space))
@@ -265,6 +268,7 @@ public class PlayerArcher : MonoBehaviour
     {
         isReceivingDamage = true;
         canShoot = true;
+        isRunning = false;
         yield return new WaitForSecondsRealtime(disableTimer);
         anim.SetFloat("Horizontal", 0);
         anim.SetFloat("Vertical", 0);

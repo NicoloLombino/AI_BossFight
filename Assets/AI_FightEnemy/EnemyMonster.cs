@@ -17,6 +17,8 @@ public class EnemyMonster : MonoBehaviour
     private SkinnedMeshRenderer mesh;
     [SerializeField]
     private GameObject leftHand;
+    [SerializeField]
+    private GameObject BT;
 
     [Header("Stats")]
     [SerializeField]
@@ -46,6 +48,8 @@ public class EnemyMonster : MonoBehaviour
     private Material materialBase;
     [SerializeField]
     private Material materialRage;
+    [SerializeField]
+    private GameObject winPanel;
 
 
     public int areaWhereIsThisMonster;
@@ -113,9 +117,11 @@ public class EnemyMonster : MonoBehaviour
             anim.SetTrigger("Death");
             agent.enabled = false;
             gameObject.GetComponent<MonsterEyes>().enabled = false;
-            hasTarget = false;
+            SetFindTarget(false);
             gameObject.tag = "Untagged";
             gameObject.layer = 0;
+            winPanel.SetActive(true);
+            BT.SetActive(false);
             enabled = false;
         }
 
