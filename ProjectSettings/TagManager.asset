@@ -7,6 +7,8 @@ TagManager:
   - Shootable
   - Enemy
   - DoozySpell
+  - Arrow
+  - Area
   layers:
   - Default
   - TransparentFX
