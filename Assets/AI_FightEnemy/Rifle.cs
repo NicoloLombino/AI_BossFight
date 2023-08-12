@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Rifle : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class Rifle : MonoBehaviour
     public float aimRange;
     public float rotationSpeed;
 
+    [SerializeField]
+    private PlayerArcher player;
+
     float xRotation = 0f;
 
 
@@ -26,11 +30,16 @@ public class Rifle : MonoBehaviour
     private void Update()
     {
         //transform.Rotate(Vector3.right, Input.GetAxis("Mouse Y") * Time.deltaTime * rotationSpeed);
-        float _mousey = Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+        if(!player.canShoot)
+        {
+            Vector2 moveCam = Gamepad.current.rightStick.ReadValue().normalized;
+            float _mousey = moveCam.y * rotationSpeed * Time.deltaTime;
 
-        xRotation -= _mousey;
-        xRotation = Mathf.Clamp(xRotation, -60, 0);
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            xRotation -= _mousey;
+            xRotation = Mathf.Clamp(xRotation, -60, 0);
+            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        }
+
         //if (transform.eulerAngles.x < -60)
         //{
         //    transform.eulerAngles = new Vector3(-60, 0, 0);

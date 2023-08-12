@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraParent : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class CameraParent : MonoBehaviour
         if(!isLocked)
         {
             transform.eulerAngles = new Vector3(0, player.eulerAngles.y, 0);
+            //Vector2 moveCam = Gamepad.current.rightStick.ReadValue().normalized;
         }
         
         if (Input.GetMouseButton(1))

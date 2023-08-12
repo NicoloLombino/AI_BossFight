@@ -161,11 +161,12 @@ public class EnemyMonster : MonoBehaviour
 
     private IEnumerator JumpAwayCoroutine()
     {
+        yield return new WaitForSecondsRealtime(0.7f);
         float percentage = 0;
         while (percentage < 1)
         {
-            percentage += Time.deltaTime / 2;
-            agent.transform.position = Vector3.Lerp(agent.transform.position, agent.transform.position + transform.up * 5, percentage);
+            percentage += Time.deltaTime / 4;
+            agent.transform.position = Vector3.Lerp(agent.transform.position, agent.transform.position + transform.up * 80, percentage);
             yield return null;
         }
 
@@ -201,7 +202,7 @@ public class EnemyMonster : MonoBehaviour
 
     public void SetFindTarget(bool find)
     {
-        hasTarget = find;
+        hasTarget = find; 
         target.gameObject.GetComponent<PlayerArcher>().enemyEyeWhenSeePlayer.SetActive(find);
     }
 

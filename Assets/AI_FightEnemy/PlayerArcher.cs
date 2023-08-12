@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class PlayerArcher : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class PlayerArcher : MonoBehaviour
     private int potionNumber;
 
     [Header("values")]
-    bool canShoot = true;
+    public bool canShoot = true;
     public bool isRunning;
     [SerializeField]
     private int potionHeal;
@@ -90,12 +91,12 @@ public class PlayerArcher : MonoBehaviour
 
         ReadMovement();
 
-        if (Input.GetMouseButtonDown(0) && canShoot && !isRunning && !isRolling)
+        if (Gamepad.current.buttonNorth.wasPressedThisFrame && canShoot && !isRunning && !isRolling)
         {
             //StartCoroutine(ShootCoroutine());
             StartShoot();
         }
-        else if ((Input.GetMouseButtonUp(0) && !canShoot && !isRunning && currentBowCharge > 1f) || (currentBowCharge >= maxBowCharge))
+        else if ((Gamepad.current.buttonNorth.wasReleasedThisFrame && !canShoot && !isRunning && currentBowCharge > 1f) || (currentBowCharge >= maxBowCharge))
         {
             if(isReceivingDamage)
             {
@@ -107,16 +108,16 @@ public class PlayerArcher : MonoBehaviour
             EndShoot();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canShoot && !isRunning && !isRolling) 
+        if (Gamepad.current.buttonWest.wasPressedThisFrame && canShoot && !isRunning && !isRolling) 
         {
             RunMode(true);
         }
-        else if(Input.GetKeyUp(KeyCode.LeftShift) && canShoot && isRunning && !isRolling)
+        else if(Gamepad.current.buttonWest.wasPressedThisFrame && canShoot && isRunning && !isRolling)
         {
             RunMode(false);
         }
 
-        if(Input.GetKeyDown(KeyCode.F) && canShoot && !isRunning && !isRolling)
+        if(Gamepad.current.buttonEast.wasPressedThisFrame && canShoot && !isRunning && !isRolling)
         {
             UsePotion();
         }
@@ -124,17 +125,18 @@ public class PlayerArcher : MonoBehaviour
 
     private void ReadMovement()
     {
+        Vector2 moveIS = Gamepad.current.leftStick.ReadValue().normalized;
         if (!isRolling)
         {
-            direction = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
+            direction = transform.forward * moveIS.y + transform.right * moveIS.x;
         }
-     
+        
         cc.Move(direction.normalized * speed * Time.deltaTime);
         //transform.LookAt(transform.position + direction, Vector3.up);
         if(!isRolling)
         {
-            anim.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
-            anim.SetFloat("Vertical", Input.GetAxis("Vertical"));
+            anim.SetFloat("Horizontal", moveIS.x);
+            anim.SetFloat("Vertical", moveIS.y);
             
             if(direction.magnitude > 0f)
             {
@@ -151,7 +153,8 @@ public class PlayerArcher : MonoBehaviour
 
         if(!Input.GetMouseButton(1) && !isRolling)
         {
-            transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * Time.deltaTime * rotationSpeed);
+            Vector2 moveCam = Gamepad.current.rightStick.ReadValue();
+            transform.Rotate(Vector3.up, moveCam.x * Time.deltaTime * rotationSpeed);
         }
 
         cc.Move(playerVelocityY * Time.deltaTime);
@@ -175,7 +178,7 @@ public class PlayerArcher : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Gamepad.current.buttonSouth.wasPressedThisFrame)
         {
             Roll();
         }
@@ -307,6 +310,7 @@ public class PlayerArcher : MonoBehaviour
         transform.forward = cameraTransForm.forward;
         anim.SetFloat("Horizontal", 0);
         anim.SetFloat("Vertical", 0);
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         isRolling = false;
         cameraTransForm.GetComponentInParent<CameraParent>().isLocked = false;
     }
